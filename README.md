@@ -1,3 +1,3 @@
 # Facisa-Dragon
 
-Projeto sendo devolvido em grupo para competencia da faculdade.
+Projeto sendo desenvolvido em grupo para competencia da faculdade.
