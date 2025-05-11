@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    public string sceneName;
+    [SerializeField] private string sceneName;
     public InputActionAsset inputActions; 
     private InputAction anyKeyAction;
 
