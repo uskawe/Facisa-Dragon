@@ -1,11 +1,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement; 
 using System.Collections;
 
 public class MenuManager : MonoBehaviour
 {
     public InputActionAsset inputActions;
     private InputAction anyKeyAction;
+
+    [Header("Scenes")]
+
+    [SerializeField] private string gameLevelName;
 
     [Header("UI Enable")]
     [SerializeField] private GameObject mainMenu;
@@ -91,5 +96,16 @@ public class MenuManager : MonoBehaviour
     void OnDestroy()
     {
         anyKeyAction.Disable();
+    }
+
+    public void OnPlayButtonPressed()
+    {
+        SceneManager.LoadScene(gameLevelName);
+    }
+
+    public void OnQuitButtonPressed()
+    {
+        Application.Quit();
+        Debug.Log("Quit button pressed - só funciona na build.");
     }
 }
