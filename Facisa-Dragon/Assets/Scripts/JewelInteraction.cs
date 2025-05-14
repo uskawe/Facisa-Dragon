@@ -3,32 +3,50 @@ using UnityEngine.InputSystem;
 
 public class JewelInteraction : MonoBehaviour
 {
-    [Header("Config")]
+    [Header("Referências")]
     public GameObject eCanvas;
-    public float interactionDistance = 4f;
     public GameObject dragonObject;
+    public GameObject swordObject;
+    public GameObject playerSword;
+    public StarterAssets.FirstPersonController playerController;
+    public Transform playerTransform;
+    public CameraShake cameraShake;
 
-    [Header("Animations")]
+    [Header("Distância de Interação")]
+    public float interactionDistance = 4f;
+
+    [Header("Empurrão")]
+    public float pushBackSpeed = 5f;
+    public float upwardSpeed = 8f;
+
+    [Header("Shake da Câmera")]
+    public float shakeDuration = 0.3f;
+    public float shakeMagnitude = 2f;
+
+    [Header("Animação do Canvas")]
     public float floatSpeed = 1f;
     public float floatHeight = 0.2f;
 
-    private Transform player;
-    private Vector3 initialCanvasPos;
-    private bool playerInRange;
     private bool hasInteracted = false;
+    private bool playerInRange;
+    private Transform playerCamera;
+    private Vector3 initialCanvasPos;
 
     void Start()
     {
-        player = Camera.main.transform;
+        playerCamera = Camera.main.transform;
         initialCanvasPos = eCanvas.transform.localPosition;
         eCanvas.SetActive(false);
+
+        if (playerSword != null)
+            playerSword.SetActive(false);
     }
 
     void Update()
     {
         if (hasInteracted) return;
 
-        float distance = Vector3.Distance(player.position, transform.position);
+        float distance = Vector3.Distance(playerCamera.position, transform.position);
         playerInRange = distance <= interactionDistance;
 
         if (playerInRange)
@@ -43,10 +61,9 @@ public class JewelInteraction : MonoBehaviour
                 Interact();
             }
         }
-        else
+        else if (eCanvas.activeSelf)
         {
-            if (eCanvas.activeSelf)
-                eCanvas.SetActive(false);
+            eCanvas.SetActive(false);
         }
     }
 
@@ -60,12 +77,30 @@ public class JewelInteraction : MonoBehaviour
     void Interact()
     {
         if (hasInteracted) return;
+        hasInteracted = true;
 
         if (dragonObject != null)
             dragonObject.SetActive(true);
 
-        eCanvas.SetActive(false);
-        hasInteracted = true;
+        if (swordObject != null)
+            swordObject.SetActive(false);
+
+        if (playerSword != null)
+            playerSword.SetActive(true);
+
+        if (playerController != null && playerTransform != null)
+        {
+            Vector3 force = Vector3.up * upwardSpeed + (-playerTransform.forward * pushBackSpeed);
+            playerController.ApplyExternalForce(force);
+        }
+
+        if (cameraShake != null)
+            cameraShake.Shake(6f, 1f);
+
+
+        if (eCanvas.activeSelf)
+            eCanvas.SetActive(false);
+
         gameObject.SetActive(false);
     }
 }
