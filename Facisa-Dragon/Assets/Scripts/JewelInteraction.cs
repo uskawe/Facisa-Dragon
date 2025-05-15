@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class JewelInteraction : MonoBehaviour
 {
-    [Header("Referências")]
+    [Header("References")]
     public GameObject eCanvas;
     public GameObject dragonObject;
     public GameObject swordObject;
@@ -11,19 +11,20 @@ public class JewelInteraction : MonoBehaviour
     public StarterAssets.FirstPersonController playerController;
     public Transform playerTransform;
     public CameraShake cameraShake;
+    public GameObject hudUI;
 
-    [Header("Distância de Interação")]
+    [Header("Distance")]
     public float interactionDistance = 4f;
 
-    [Header("Empurrão")]
+    [Header("Push")]
     public float pushBackSpeed = 5f;
     public float upwardSpeed = 8f;
 
-    [Header("Shake da Câmera")]
+    [Header("Shake")]
     public float shakeDuration = 0.3f;
     public float shakeMagnitude = 2f;
 
-    [Header("Animação do Canvas")]
+    [Header("Animation")]
     public float floatSpeed = 1f;
     public float floatHeight = 0.2f;
 
@@ -40,6 +41,9 @@ public class JewelInteraction : MonoBehaviour
 
         if (playerSword != null)
             playerSword.SetActive(false);
+
+        if (hudUI != null)
+            hudUI.SetActive(false);    
     }
 
     void Update()
@@ -87,6 +91,9 @@ public class JewelInteraction : MonoBehaviour
 
         if (playerSword != null)
             playerSword.SetActive(true);
+
+        if (hudUI != null)
+            hudUI.SetActive(true);
 
         if (playerController != null && playerTransform != null)
         {
