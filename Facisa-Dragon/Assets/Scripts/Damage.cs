@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Damage : MonoBehaviour
 {
@@ -49,11 +50,23 @@ public class Damage : MonoBehaviour
         vidaAtual -= dano;
         vidaAtual = Mathf.Clamp(vidaAtual, 0, vidaTotal);
         lifeBar.AlterarBarraDeVida(vidaAtual, vidaTotal);
+
+        if (vidaAtual <= 0)
+        {
+            StartCoroutine(ReiniciarCenaDepoisDe(3f)); // Espera 3 segundos
+        }
     }
 
     public void ReceberKnockback(Vector3 direcao, float forca)
     {
         knockbackVelocidade = direcao.normalized * forca;
         knockbackTimer = knockbackDuracao;
+    }
+
+    private IEnumerator ReiniciarCenaDepoisDe(float tempo)
+    {
+        // Aqui você pode desativar o controle do jogador se quiser
+        yield return new WaitForSeconds(tempo);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

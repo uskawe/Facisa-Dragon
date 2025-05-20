@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyDamage : MonoBehaviour
 {
     private int vidaAtual;
     private int vidaTotal = 100;
 
-    [SerializeField] private LifeBar lifeBar;
+    [Header("Barra de vida do dragão")]
+    [SerializeField] private Image dragonLifeBarFull;
+
+    [Header("Após a morte")]
     [SerializeField] private GameObject objetoParaAtivarDepoisDaMorte;
     [SerializeField] private GameObject[] hudsParaDesativar;
     [SerializeField] private float fadeDuration = 1f;
@@ -18,8 +22,8 @@ public class EnemyDamage : MonoBehaviour
     private void Start()
     {
         vidaAtual = vidaTotal;
-        lifeBar.AlterarBarraDeVida(vidaAtual, vidaTotal);
-
+        AtualizarBarra();
+        
         if (objetoParaAtivarDepoisDaMorte != null)
         {
             Renderer renderer = objetoParaAtivarDepoisDaMorte.GetComponent<Renderer>();
@@ -39,7 +43,7 @@ public class EnemyDamage : MonoBehaviour
     {
         vidaAtual -= dano;
         vidaAtual = Mathf.Clamp(vidaAtual, 0, vidaTotal);
-        lifeBar.AlterarBarraDeVida(vidaAtual, vidaTotal);
+        AtualizarBarra();
 
         if (vidaAtual <= 0)
         {
@@ -67,6 +71,14 @@ public class EnemyDamage : MonoBehaviour
             }
 
             Destroy(gameObject);
+        }
+    }
+
+    private void AtualizarBarra()
+    {
+        if (dragonLifeBarFull != null)
+        {
+            dragonLifeBarFull.fillAmount = (float)vidaAtual / vidaTotal;
         }
     }
 
@@ -110,7 +122,7 @@ public class EnemyDamage : MonoBehaviour
                 damageScript.AplicarDano(10);
 
                 Vector3 direcaoKnockback = other.transform.position - transform.position;
-                damageScript.ReceberKnockback(direcaoKnockback, 5f); // força = 5
+                damageScript.ReceberKnockback(direcaoKnockback, 10f); // força = 5
                 tempoDoUltimoAtaque = Time.time;
             }
         }
